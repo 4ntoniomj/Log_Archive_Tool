@@ -18,8 +18,8 @@ function ctrl_c() {
 }
 trap ctrl_c INT
 
-if [ $# -ne 1 ]; then
-	echo -e "${redColour}[!] Give me the directory for save .tar. example: ./log-archive /tmp${endColour}"
+if [ $# -ne 2 ]; then
+	echo -e "${redColour}[!] ERROR\n${yellowColour}Give me the directory for save .tar and the source directory\nExample: ./log-archive /tmp /var/log${endColour}"
 	exit 1
 fi
 
@@ -29,5 +29,10 @@ if [[ ${1:-1} == "\/" ]]; then
 else
 	dir="$1"
 fi
-mkdir -p "$dir"
-tar -cvzf "${dir}/$name" /var/log
+if [[ ${2:-1} == "\/" ]]; then
+	source=${2:-1}
+else
+	source="$2"
+fi
+mkdir -p "$dir" "$source"
+tar -cvzf "${dir}/$name" "$source"
